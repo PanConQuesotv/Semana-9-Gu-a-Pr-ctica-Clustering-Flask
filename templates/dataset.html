@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dataset</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<section class="dataset-container">
+
+    <h2>Dataset de jugadores</h2>
+
+    <div class="layout">
+
+        <!-- IZQUIERDA -->
+        <div class="col">
+            <h3>250 registros</h3>
+            <div class="tabla-wrapper">
+                <table id="tabla-full">
+                    <thead>
+                        <tr>
+                            <th>Horas</th>
+                            <th>Logros</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- CENTRO -->
+        <div class="col center">
+            <p>
+                Se generan 250 datos aleatorios dentro de rangos definidos.
+                Posteriormente, se seleccionan 100 registros para el análisis.
+            </p>
+
+            <button class="btn" onclick="generarDatos()">Generar datos</button>
+
+           <div class="botones">
+    <a href="/kmeans" class="btn">Ir a K-Means</a>
+    <a href="/" class="btn">Volver</a>
+</div>
+        </div>
+
+        <!-- DERECHA -->
+        <div class="col">
+            <h3>100 seleccionados</h3>
+            <div class="tabla-wrapper">
+                <table id="tabla-sample">
+                    <thead>
+                        <tr>
+                            <th>Horas</th>
+                            <th>Logros</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<script>
+function generarDatos() {
+    let datos = [];
+
+    for (let i = 0; i < 250; i++) {
+        let horas = Math.floor(Math.random() * 300) + 1;
+        let logros = Math.floor(Math.random() * 100);
+        datos.push({ horas, logros });
+    }
+
+    // tabla completa
+    let full = document.querySelector("#tabla-full tbody");
+    full.innerHTML = "";
+
+    datos.forEach(d => {
+        full.innerHTML += `<tr><td>${d.horas}</td><td>${d.logros}</td></tr>`;
+    });
+
+    // muestra 100
+    let sample = datos.sort(() => 0.5 - Math.random()).slice(0, 100);
+
+    let sampleTable = document.querySelector("#tabla-sample tbody");
+    sampleTable.innerHTML = "";
+
+    sample.forEach(d => {
+        sampleTable.innerHTML += `<tr><td>${d.horas}</td><td>${d.logros}</td></tr>`;
+    });
+    
+    localStorage.setItem("datos_kmeans", JSON.stringify(sample));
+
+}
+
+window.onload = generarDatos;
+</script>
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>K-Means Steam</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>K-Means en Steam</h1>
+        <p>
+            Segmentación de jugadores basada en horas jugadas y logros obtenidos
+            mediante técnicas de clustering.
+        </p>
+    </div>
+</section>
+
+<!-- BANDA -->
+<section class="banda">
+    <h2>K-MEANS • STEAM • CLUSTERING • DATA SCIENCE</h2>
+</section>
+
+<!-- ACERCA DEL PROYECTO -->
+<section class="approach">
+    <h2>Acerca del proyecto</h2>
+
+    <div class="cards">
+
+        <div class="box">
+            <h3>Descripción del problema</h3>
+            <p>
+                Se busca identificar patrones en el comportamiento de jugadores
+                según sus horas jugadas y logros obtenidos.
+            </p>
+        </div>
+
+        <div class="box">
+            <h3>Descripción del dataset</h3>
+            <p>
+                Los datos se generan mediante un algoritmo que define valores mínimos
+                y máximos, seleccionando 100 registros representativos.
+            </p>
+        </div>
+
+        <div class="box">
+            <h3>Preparación de datos</h3>
+            <p>
+                Se realiza limpieza, selección de variables y normalización para
+                garantizar un análisis adecuado.
+            </p>
+        </div>
+
+        <div class="box">
+            <h3>Algoritmo K-Means</h3>
+            <p>
+                Agrupa jugadores según similitud, permitiendo identificar perfiles
+                como jugadores casuales o completistas.
+            </p>
+        </div>
+
+        <div class="box">
+            <h3>Número de clústeres</h3>
+            <p>
+                Se determina mediante el método del codo, analizando la inercia
+                para encontrar el valor óptimo de K.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- BOTONES -->
+    <div class="botones">
+        <a href="/dataset" class="btn">Ver Dataset</a>
+        <a href="/kmeans" class="btn">Ejecutar K-Means</a>
+    </div>
+
+</section>
+
+</body>
+</html>
