@@ -33,7 +33,7 @@
         <div class="col center">
             <p>
                 Se generan 250 datos aleatorios dentro de rangos definidos.
-                Posteriormente, se seleccionan 100 registros para el análisis.
+                Posteriormente, se seleccionan 100 registros para el análisis mediante la eliminación de valores extremos.
             </p>
 
             <button class="btn" onclick="generarDatos()">Generar datos</button>
@@ -71,29 +71,51 @@ function generarDatos() {
     for (let i = 0; i < 250; i++) {
         let horas = Math.floor(Math.random() * 300) + 1;
         let logros = Math.floor(Math.random() * 100);
+
         datos.push({ horas, logros });
     }
 
-    // tabla completa
+    
     let full = document.querySelector("#tabla-full tbody");
     full.innerHTML = "";
 
     datos.forEach(d => {
-        full.innerHTML += `<tr><td>${d.horas}</td><td>${d.logros}</td></tr>`;
+        full.innerHTML += `
+            <tr>
+                <td>${d.horas}</td>
+                <td>${d.logros}</td>
+            </tr>
+        `;
     });
 
-    // muestra 100
-    let sample = datos.sort(() => 0.5 - Math.random()).slice(0, 100);
 
+    let filtrados = datos.filter(d =>
+        d.horas >= 20 &&
+        d.horas <= 280 &&
+        d.logros >= 5 &&
+        d.logros <= 95
+    );
+
+
+    let sample = filtrados
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 100);
+
+ 
     let sampleTable = document.querySelector("#tabla-sample tbody");
     sampleTable.innerHTML = "";
 
     sample.forEach(d => {
-        sampleTable.innerHTML += `<tr><td>${d.horas}</td><td>${d.logros}</td></tr>`;
+        sampleTable.innerHTML += `
+            <tr>
+                <td>${d.horas}</td>
+                <td>${d.logros}</td>
+            </tr>
+        `;
     });
-    
-    localStorage.setItem("datos_kmeans", JSON.stringify(sample));
 
+
+    localStorage.setItem("datos_kmeans", JSON.stringify(sample));
 }
 
 window.onload = generarDatos;
