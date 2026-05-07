@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>K-Means Clustering</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -14,199 +17,421 @@
 
     <div class="layout">
 
-        <!-- IZQUIERDA -->
         <div class="col">
+
             <h3>Distancias a centroides</h3>
-            <div id="tabla-distancias" class="tabla-wrapper"></div>
+
+            <div id="tabla-distancias"
+                 class="tabla-wrapper">
+            </div>
+
         </div>
 
-        <!-- DERECHA -->
         <div class="col center">
 
-            <canvas id="grafica" width="500" height="350"></canvas>
+            <canvas id="grafica"
+                    width="500"
+                    height="350">
+            </canvas>
 
             <p id="info"></p>
 
-<div class="botones">
-    <button class="btn" onclick="prevStep()">Anterior</button>
-    <button class="btn" onclick="nextStep()">Siguiente</button>
+            <div style="margin-top:20px;">
 
-    <a href="/dataset" class="btn">Dataset</a>
-    <a href="/" class="btn">Inicio</a>
-</div>
+                <label for="iteraciones">
+                    Iteraciones:
+                </label>
+
+                <input
+                    type="number"
+                    id="iteraciones"
+                    value="5"
+                    min="1"
+                    max="20"
+
+                    style="
+                        width:70px;
+                        padding:8px;
+                        border-radius:8px;
+                        border:none;
+                        text-align:center;
+                    "
+                >
+
+                <button class="btn"
+                        onclick="reiniciarKmeans()">
+                    Aplicar
+                </button>
+
+            </div>
+
+            <div class="botones">
+
+                <button class="btn"
+                        onclick="prevStep()">
+                    Anterior
+                </button>
+
+                <button class="btn"
+                        onclick="nextStep()">
+                    Siguiente
+                </button>
+
+                <a href="/dataset"
+                   class="btn">
+                    Dataset
+                </a>
+
+                <a href="/"
+                   class="btn">
+                    Inicio
+                </a>
+
+            </div>
 
         </div>
 
     </div>
 
+    <p style="
+        margin-top:30px;
+        font-size:0.95rem;
+        opacity:0.8;
+        line-height:1.6;
+        text-align:center;
+        max-width:1000px;
+        margin-left:auto;
+        margin-right:auto;
+    ">
+        El valor predeterminado es 5 iteraciones debido
+        a que normalmente el algoritmo alcanza una
+        agrupación estable en pocas repeticiones para
+        datasets pequeños. Esto permite visualizar
+        claramente el movimiento de los centroides sin
+        generar iteraciones innecesarias.
+    </p>
+
 </section>
 
 <script>
+
 let datos = [];
+
 let pasos = [];
+
 let pasoActual = 0;
 
 function cargarDatos() {
-    let data = localStorage.getItem("datos_kmeans");
+
+    let data =
+        localStorage.getItem("datos_kmeans");
 
     if (data) {
+
         datos = JSON.parse(data).map(d => ({
             x: d.horas,
             y: d.logros
         }));
+
     } else {
+
         datos = [];
+
         for (let i = 0; i < 100; i++) {
+
             datos.push({
                 x: Math.random() * 300,
                 y: Math.random() * 100
             });
+
         }
     }
 }
 
 function distancia(a, b) {
-    return Math.sqrt((a.x - b.x)**2 + (a.y - b.y)**2);
+
+    return Math.sqrt(
+        (a.x - b.x) ** 2 +
+        (a.y - b.y) ** 2
+    );
 }
 
-function kmeans(k=3, iteraciones=5) {
+function kmeans(k = 3, iteraciones = 5) {
 
     pasos = [];
 
     let centroides = datos.slice(0, k);
+
     let clusters;
 
     for (let it = 0; it < iteraciones; it++) {
 
         clusters = datos.map(p => {
-            let distancias = centroides.map(c => distancia(p, c));
-            let min = distancias.indexOf(Math.min(...distancias));
-            return {...p, cluster: min};
+
+            let distancias =
+                centroides.map(c => distancia(p, c));
+
+            let min =
+                distancias.indexOf(
+                    Math.min(...distancias)
+                );
+
+            return {
+                ...p,
+                cluster: min
+            };
+
         });
 
         pasos.push({
-            centroides: JSON.parse(JSON.stringify(centroides)),
-            puntos: JSON.parse(JSON.stringify(clusters)),
-            iteracion: it
+
+            centroides:
+                JSON.parse(JSON.stringify(centroides)),
+
+            puntos:
+                JSON.parse(JSON.stringify(clusters)),
+
+            iteracion: it + 1
         });
 
         centroides = centroides.map((c, i) => {
-            let grupo = clusters.filter(p => p.cluster === i);
 
-            if (grupo.length === 0) return c;
+            let grupo =
+                clusters.filter(p => p.cluster === i);
 
-            let x = grupo.reduce((sum,p)=>sum+p.x,0)/grupo.length;
-            let y = grupo.reduce((sum,p)=>sum+p.y,0)/grupo.length;
+            if (grupo.length === 0)
+                return c;
 
-            return {x,y};
+            let x =
+                grupo.reduce((sum, p) =>
+                    sum + p.x, 0) / grupo.length;
+
+            let y =
+                grupo.reduce((sum, p) =>
+                    sum + p.y, 0) / grupo.length;
+
+            return { x, y };
+
         });
+
     }
 
-    pasos.push({
-        centroides,
-        puntos: clusters,
-        iteracion: "Final"
-    });
 }
 
 function generarTablaDistancias(paso) {
+
     let html = `
+
         <table>
+
             <thead>
+
                 <tr>
+
                     <th>Punto</th>
+
                     <th>C1</th>
+
                     <th>C2</th>
+
                     <th>C3</th>
+
                     <th>Cluster</th>
+
                 </tr>
+
             </thead>
+
             <tbody>
     `;
 
     paso.puntos.forEach((p, i) => {
-        let distancias = paso.centroides.map(c =>
-            Math.sqrt((p.x - c.x)**2 + (p.y - c.y)**2)
-        );
+
+        let distancias =
+            paso.centroides.map(c =>
+
+                Math.sqrt(
+                    (p.x - c.x) ** 2 +
+                    (p.y - c.y) ** 2
+                )
+
+            );
 
         html += `
+
             <tr>
+
                 <td>${i + 1}</td>
+
                 <td>${distancias[0].toFixed(1)}</td>
+
                 <td>${distancias[1].toFixed(1)}</td>
+
                 <td>${distancias[2].toFixed(1)}</td>
+
                 <td>${p.cluster + 1}</td>
+
             </tr>
         `;
+
     });
 
-    html += "</tbody></table>";
+    html += `
+            </tbody>
+        </table>
+    `;
 
-    document.getElementById("tabla-distancias").innerHTML = html;
+    document.getElementById(
+        "tabla-distancias"
+    ).innerHTML = html;
+
 }
 
 let chart;
 
 function dibujarPaso() {
+
     let paso = pasos[pasoActual];
 
-    let colores = ["red","blue","green"];
+    let colores = [
+        "red",
+        "blue",
+        "green"
+    ];
 
     let datasets = [];
 
     for (let i = 0; i < 3; i++) {
-        let puntos = paso.puntos.filter(p => p.cluster === i);
+
+        let puntos =
+            paso.puntos.filter(
+                p => p.cluster === i
+            );
 
         datasets.push({
+
             label: "Cluster " + (i + 1),
+
             data: puntos,
-            backgroundColor: colores[i]
+
+            backgroundColor: colores[i],
+
+            pointRadius: 5
+
         });
+
     }
 
     datasets.push({
+
         label: "Centroides",
+
         data: paso.centroides,
+
         backgroundColor: "white",
-        pointRadius: 8
+
+        pointRadius: 9
+
     });
 
-    if (chart) chart.destroy();
+    if (chart)
+        chart.destroy();
 
-    chart = new Chart(document.getElementById("grafica"), {
-        type: 'scatter',
-        data: { datasets },
-        options: {
-            scales: {
-                x: { title: { display: true, text: "Horas jugadas" } },
-                y: { title: { display: true, text: "Logros obtenidos" } }
+    chart = new Chart(
+
+        document.getElementById("grafica"),
+
+        {
+
+            type: 'scatter',
+
+            data: {
+                datasets
+            },
+
+            options: {
+
+                animation: false,
+
+                scales: {
+
+                    x: {
+
+                        title: {
+                            display: true,
+                            text: "Horas jugadas"
+                        }
+
+                    },
+
+                    y: {
+
+                        title: {
+                            display: true,
+                            text: "Logros obtenidos"
+                        }
+
+                    }
+
+                }
+
             }
-        }
-    });
 
-    document.getElementById("info").innerText =
+        }
+
+    );
+
+    document.getElementById("info")
+        .innerText =
         "Iteración: " + paso.iteracion;
 
     generarTablaDistancias(paso);
+
 }
 
 function nextStep() {
+
     if (pasoActual < pasos.length - 1) {
+
         pasoActual++;
+
         dibujarPaso();
+
     }
 }
 
 function prevStep() {
+
     if (pasoActual > 0) {
+
         pasoActual--;
+
         dibujarPaso();
+
     }
 }
 
+function reiniciarKmeans() {
+
+    let iteraciones =
+        parseInt(
+            document.getElementById("iteraciones").value
+        );
+
+    pasoActual = 0;
+
+    kmeans(3, iteraciones);
+
+    dibujarPaso();
+
+}
+
 cargarDatos();
-kmeans();
+
+kmeans(3, 5);
+
 dibujarPaso();
+
 </script>
 
 </body>
