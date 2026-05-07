@@ -21,22 +21,36 @@
 
             <h3>Distancias a centroides</h3>
 
-            <div id="tabla-distancias"
-                 class="tabla-wrapper">
+            <div id="tabla-distancias" class="tabla-wrapper"></div>
+
+            <div class="box" style="margin-top:20px; width:100%;">
+
+                <h3>Interpretación</h3>
+
+                <p id="interpretacion">
+                    Los jugadores son agrupados según la cercanía
+                    entre horas jugadas y logros obtenidos.
+                </p>
+
+                <br>
+
+                <p>
+                    El valor predeterminado de 5 iteraciones permite
+                    observar claramente el movimiento de los centroides
+                    y la estabilización progresiva de los clústeres.
+                </p>
+
             </div>
 
         </div>
 
         <div class="col center">
 
-            <canvas id="grafica"
-                    width="500"
-                    height="350">
-            </canvas>
+            <canvas id="grafica" width="600" height="380"></canvas>
 
             <p id="info"></p>
 
-            <div style="margin-top:20px;">
+            <div class="box">
 
                 <label for="iteraciones">
                     Iteraciones:
@@ -48,14 +62,6 @@
                     value="5"
                     min="1"
                     max="20"
-
-                    style="
-                        width:70px;
-                        padding:8px;
-                        border-radius:8px;
-                        border:none;
-                        text-align:center;
-                    "
                 >
 
                 <button class="btn"
@@ -77,13 +83,11 @@
                     Siguiente
                 </button>
 
-                <a href="/dataset"
-                   class="btn">
+                <a href="/dataset" class="btn">
                     Dataset
                 </a>
 
-                <a href="/"
-                   class="btn">
+                <a href="/" class="btn">
                     Inicio
                 </a>
 
@@ -93,32 +97,12 @@
 
     </div>
 
-    <p style="
-        margin-top:30px;
-        font-size:0.95rem;
-        opacity:0.8;
-        line-height:1.6;
-        text-align:center;
-        max-width:1000px;
-        margin-left:auto;
-        margin-right:auto;
-    ">
-        El valor predeterminado es 5 iteraciones debido
-        a que normalmente el algoritmo alcanza una
-        agrupación estable en pocas repeticiones para
-        datasets pequeños. Esto permite visualizar
-        claramente el movimiento de los centroides sin
-        generar iteraciones innecesarias.
-    </p>
-
 </section>
 
 <script>
 
 let datos = [];
-
 let pasos = [];
-
 let pasoActual = 0;
 
 function cargarDatos() {
@@ -135,15 +119,12 @@ function cargarDatos() {
 
     } else {
 
-        datos = [];
-
         for (let i = 0; i < 100; i++) {
 
             datos.push({
                 x: Math.random() * 300,
                 y: Math.random() * 100
             });
-
         }
     }
 }
@@ -169,7 +150,9 @@ function kmeans(k = 3, iteraciones = 5) {
         clusters = datos.map(p => {
 
             let distancias =
-                centroides.map(c => distancia(p, c));
+                centroides.map(c =>
+                    distancia(p, c)
+                );
 
             let min =
                 distancias.indexOf(
@@ -180,16 +163,19 @@ function kmeans(k = 3, iteraciones = 5) {
                 ...p,
                 cluster: min
             };
-
         });
 
         pasos.push({
 
             centroides:
-                JSON.parse(JSON.stringify(centroides)),
+                JSON.parse(
+                    JSON.stringify(centroides)
+                ),
 
             puntos:
-                JSON.parse(JSON.stringify(clusters)),
+                JSON.parse(
+                    JSON.stringify(clusters)
+                ),
 
             iteracion: it + 1
         });
@@ -197,47 +183,47 @@ function kmeans(k = 3, iteraciones = 5) {
         centroides = centroides.map((c, i) => {
 
             let grupo =
-                clusters.filter(p => p.cluster === i);
+                clusters.filter(
+                    p => p.cluster === i
+                );
 
             if (grupo.length === 0)
                 return c;
 
             let x =
-                grupo.reduce((sum, p) =>
-                    sum + p.x, 0) / grupo.length;
+                grupo.reduce(
+                    (sum, p) => sum + p.x, 0
+                ) / grupo.length;
 
             let y =
-                grupo.reduce((sum, p) =>
-                    sum + p.y, 0) / grupo.length;
+                grupo.reduce(
+                    (sum, p) => sum + p.y, 0
+                ) / grupo.length;
 
             return { x, y };
-
         });
-
     }
 
+    pasos.push({
+        centroides,
+        puntos: clusters,
+        iteracion: "Final"
+    });
 }
 
 function generarTablaDistancias(paso) {
 
     let html = `
-
         <table>
 
             <thead>
 
                 <tr>
-
                     <th>Punto</th>
-
                     <th>C1</th>
-
                     <th>C2</th>
-
                     <th>C3</th>
-
                     <th>Cluster</th>
-
                 </tr>
 
             </thead>
@@ -254,11 +240,9 @@ function generarTablaDistancias(paso) {
                     (p.x - c.x) ** 2 +
                     (p.y - c.y) ** 2
                 )
-
             );
 
         html += `
-
             <tr>
 
                 <td>${i + 1}</td>
@@ -273,7 +257,6 @@ function generarTablaDistancias(paso) {
 
             </tr>
         `;
-
     });
 
     html += `
@@ -284,7 +267,6 @@ function generarTablaDistancias(paso) {
     document.getElementById(
         "tabla-distancias"
     ).innerHTML = html;
-
 }
 
 let chart;
@@ -310,16 +292,14 @@ function dibujarPaso() {
 
         datasets.push({
 
-            label: "Cluster " + (i + 1),
+            label:
+                "Cluster " + (i + 1),
 
             data: puntos,
 
-            backgroundColor: colores[i],
-
-            pointRadius: 5
-
+            backgroundColor:
+                colores[i]
         });
-
     }
 
     datasets.push({
@@ -330,20 +310,17 @@ function dibujarPaso() {
 
         backgroundColor: "white",
 
-        pointRadius: 9
-
+        pointRadius: 8
     });
 
-    if (chart)
-        chart.destroy();
+    if (chart) chart.destroy();
 
     chart = new Chart(
 
         document.getElementById("grafica"),
 
         {
-
-            type: 'scatter',
+            type: "scatter",
 
             data: {
                 datasets
@@ -356,29 +333,21 @@ function dibujarPaso() {
                 scales: {
 
                     x: {
-
                         title: {
                             display: true,
                             text: "Horas jugadas"
                         }
-
                     },
 
                     y: {
-
                         title: {
                             display: true,
                             text: "Logros obtenidos"
                         }
-
                     }
-
                 }
-
             }
-
         }
-
     );
 
     document.getElementById("info")
@@ -387,6 +356,34 @@ function dibujarPaso() {
 
     generarTablaDistancias(paso);
 
+    actualizarInterpretacion(paso);
+}
+
+function actualizarInterpretacion(paso) {
+
+    let texto = "";
+
+    if (paso.iteracion === 1) {
+
+        texto =
+        "En la primera iteración los centroides comienzan a dividir los jugadores según la cercanía entre sus datos.";
+
+    } else if (
+        paso.iteracion === "Final"
+    ) {
+
+        texto =
+        "Los centroides alcanzaron posiciones estables y los grupos finales representan perfiles distintos de jugadores.";
+
+    } else {
+
+        texto =
+        "Los centroides continúan ajustándose para minimizar las distancias entre jugadores y clústeres.";
+    }
+
+    document.getElementById(
+        "interpretacion"
+    ).innerText = texto;
 }
 
 function nextStep() {
@@ -396,7 +393,6 @@ function nextStep() {
         pasoActual++;
 
         dibujarPaso();
-
     }
 }
 
@@ -407,7 +403,6 @@ function prevStep() {
         pasoActual--;
 
         dibujarPaso();
-
     }
 }
 
@@ -415,7 +410,9 @@ function reiniciarKmeans() {
 
     let iteraciones =
         parseInt(
-            document.getElementById("iteraciones").value
+            document.getElementById(
+                "iteraciones"
+            ).value
         );
 
     pasoActual = 0;
@@ -423,13 +420,10 @@ function reiniciarKmeans() {
     kmeans(3, iteraciones);
 
     dibujarPaso();
-
 }
 
 cargarDatos();
-
 kmeans(3, 5);
-
 dibujarPaso();
 
 </script>

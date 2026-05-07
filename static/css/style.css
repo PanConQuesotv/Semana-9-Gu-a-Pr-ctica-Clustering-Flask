@@ -6,20 +6,27 @@
 
 body {
     font-family: Arial, sans-serif;
+
     background:
-        linear-gradient(rgba(11,15,20,0.85), rgba(11,15,20,0.92)),
+        linear-gradient(rgba(11,15,20,0.72), rgba(11,15,20,0.82)),
         url("../img/steam_bg.jpg") center/cover fixed no-repeat;
+
     color: white;
     min-height: 100vh;
 }
 
-/* HERO */
 .hero {
     padding: 40px 20px 30px;
+
     display: flex;
     justify-content: center;
     align-items: center;
-    background: radial-gradient(circle at top, rgba(0,0,0,0.6), #0b0f14);
+
+    background:
+        radial-gradient(circle at top,
+        rgba(0,0,0,0.6),
+        #0b0f14);
+
     clip-path: ellipse(100% 75% at 50% 20%);
 }
 
@@ -38,14 +45,20 @@ body {
     opacity: 0.85;
 }
 
-/* BANDA */
+
 .banda {
-    background: #111;
+    background: rgba(10,10,10,0.7);
+
     padding: 15px;
+
     text-align: center;
+
     border-top: 1px solid rgba(255,255,255,0.1);
     border-bottom: 1px solid rgba(255,255,255,0.1);
+
     margin-top: 10vh;
+
+    backdrop-filter: blur(4px);
 }
 
 .banda h2 {
@@ -53,16 +66,17 @@ body {
     letter-spacing: 2px;
 }
 
-/* SECCIÓN PRINCIPAL */
 .approach {
     padding: 60px 40px;
+
     text-align: center;
-    background: rgba(11,15,20,0.85);
-    margin: 0;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+
+    background: rgba(11,15,20,0.7);
+
+    backdrop-filter: blur(6px);
+
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
 }
 
 .approach h2 {
@@ -70,54 +84,73 @@ body {
     margin-bottom: 40px;
 }
 
-/* TARJETAS */
+
 .cards {
     display: flex;
     flex-wrap: wrap;
+
     justify-content: center;
+
     gap: 20px;
 }
 
 .box {
     width: 280px;
-    background: rgba(20, 25, 35, 0.4);
+
+    background: rgba(20,25,35,0.45);
+
     padding: 20px;
-    border-radius: 10px;
+
+    border-radius: 12px;
+
     text-align: left;
+
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    box-shadow: 0 0 20px rgba(0,0,0,0.35);
+
     transition: 0.3s;
 }
 
 .box:hover {
-    transform: translateY(-6px) scale(1.02);
+    transform: translateY(-5px) scale(1.02);
 }
 
 .box h3 {
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 .box p {
     font-size: 0.95rem;
-    opacity: 0.85;
+    opacity: 0.9;
+    line-height: 1.5;
 }
 
-/* BOTONES */
 .botones {
-    margin-top: 40px;
+    margin-top: 30px;
 }
 
 .btn {
     text-decoration: none;
+
     color: white;
+
     background: #007bff;
+
     padding: 12px 20px;
+
     border-radius: 10px;
-    margin: 10px;
+
+    margin: 8px;
+
     border: none;
+
     cursor: pointer;
+
     transition: 0.3s;
+
     display: inline-block;
 }
 
@@ -126,69 +159,96 @@ body {
     transform: translateY(-3px);
 }
 
-/* CONTENEDOR GENERAL */
+
 .dataset-container {
-    padding: 40px;
-    max-width: 1300px;
-    margin: 60px auto;
+    padding: 30px;
+    max-width: 1350px;
+    margin: 10px auto;
     text-align: center;
-    background: rgba(11,15,20,0.7);
-    border-radius: 10px;
-    backdrop-filter: blur(4px);
+    background: rgba(11,15,20,0.55);
+    border-radius: 14px;
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 0 25px rgba(0,0,0,0.4);
 }
 
-/* LAYOUT */
+
 .layout {
     display: flex;
+
     justify-content: space-between;
+
     gap: 20px;
-    margin-top: 30px;
+
+    margin-top: 25px;
 }
 
-/* COLUMNAS */
 .col {
     flex: 1;
 }
 
+.col:first-child {
+    flex: 1.2;
+}
+
+.col:last-child {
+    flex: 1;
+}
+
 .center {
-    text-align: center;
     display: flex;
+
     flex-direction: column;
+
     justify-content: center;
+
     align-items: center;
+
     gap: 20px;
 }
 
-/* TABLAS */
 .tabla-wrapper {
-    max-height: 400px;
+    max-height: 420px;
+
     overflow-y: auto;
     overflow-x: auto;
+
     border-radius: 10px;
 }
 
 table {
     width: 100%;
+
     border-collapse: collapse;
-    background: rgba(20, 25, 35, 0.65);
+
+    background: rgba(20,25,35,0.65);
+
     color: white;
 }
 
-/* HEADER FIJO */
 th {
     position: sticky;
+
     top: 0;
+
     background: #007bff;
+
     z-index: 2;
+
     padding: 8px;
+
     font-size: 0.9rem;
+
     text-align: center;
+
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
 td {
     padding: 8px;
+
     font-size: 0.9rem;
+
     text-align: center;
 }
 
@@ -196,7 +256,6 @@ tr:nth-child(even) {
     background: rgba(255,255,255,0.05);
 }
 
-/* SCROLL BONITO */
 .tabla-wrapper::-webkit-scrollbar {
     width: 6px;
 }
@@ -206,13 +265,21 @@ tr:nth-child(even) {
     border-radius: 10px;
 }
 
-/* KMEANS */
-canvas {
-    background: rgba(20, 25, 35, 0.6);
-    border-radius: 10px;
+
+#grafica {
+    width: 100%;
+
+    max-width: 650px;
+
+    background: rgba(20,25,35,0.45);
+
+    border-radius: 12px;
+
     padding: 10px;
-    max-width: 100%;
-    height: auto;
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    box-shadow: 0 0 15px rgba(0,0,0,0.35);
 }
 
 #tabla-distancias {
@@ -220,23 +287,53 @@ canvas {
     overflow-y: auto;
 }
 
-/* BALANCE COLUMNAS */
-.col:first-child {
-    flex: 1.2;
+#interpretacion {
+    line-height: 1.6;
+    opacity: 0.9;
 }
 
-.col:last-child {
-    flex: 1;
+input[type="number"] {
+    width: 80px;
+
+    padding: 10px;
+
+    border-radius: 10px;
+
+    border: 1px solid rgba(255,255,255,0.1);
+
+    background: rgba(20,25,35,0.8);
+
+    color: white;
+
+    text-align: center;
 }
 
-/* RESPONSIVE */
+label {
+    margin-right: 10px;
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+
+h3 {
+    margin-bottom: 15px;
+}
+
+
 @media (max-width: 900px) {
+
     .layout {
         flex-direction: column;
+    }
+
+    .dataset-container {
+        margin: 20px;
     }
 }
 
 @media (max-width: 768px) {
+
     .hero h1 {
         font-size: 2rem;
     }
@@ -245,9 +342,8 @@ canvas {
         flex-direction: column;
         align-items: center;
     }
-    
+
     .dataset-container {
-        margin: 30px 20px;
         padding: 20px;
     }
 }
