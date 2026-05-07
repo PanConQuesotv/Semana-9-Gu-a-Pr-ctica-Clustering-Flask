@@ -15,7 +15,7 @@
 
         <!-- IZQUIERDA -->
         <div class="col">
-            <h3>250 registros</h3>
+            <h3>300 registros</h3>
             <div class="tabla-wrapper">
                 <table id="tabla-full">
                     <thead>
@@ -32,7 +32,7 @@
         <!-- CENTRO -->
         <div class="col center">
             <p>
-                Se generan 250 datos aleatorios dentro de rangos definidos.
+                Se generan 300 datos aleatorios dentro de rangos definidos.
                 Posteriormente, se seleccionan 100 registros para el análisis mediante la eliminación de valores extremos.
             </p>
 
@@ -68,7 +68,7 @@
 function generarDatos() {
     let datos = [];
 
-    for (let i = 0; i < 250; i++) {
+    for (let i = 0; i < 3000; i++) {
         let horas = Math.floor(Math.random() * 300) + 1;
         let logros = Math.floor(Math.random() * 100);
 
