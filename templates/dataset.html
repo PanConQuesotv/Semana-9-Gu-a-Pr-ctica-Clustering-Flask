@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,6 +14,7 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body>
 
 <section class="dataset-container">
@@ -39,16 +39,22 @@
             </h3>
 
             <div class="tabla-wrapper">
+
                 <table id="tabla-full" class="modern-table">
+
                     <thead>
                         <tr>
                             <th>Horas</th>
                             <th>Logros</th>
                         </tr>
                     </thead>
+
                     <tbody></tbody>
+
                 </table>
+
             </div>
+
         </div>
 
         <!-- CENTRO -->
@@ -62,25 +68,37 @@
                 </h3>
 
                 <p>
-                    Se generan 300 datos aleatorios relacionados con horas jugadas y logros desbloqueados.
-                    Posteriormente, se seleccionan 100 registros para el análisis del modelo K-Means.
+                    Se generan 300 datos aleatorios relacionados con horas jugadas
+                    y logros desbloqueados. Posteriormente se seleccionan
+                    100 registros para el análisis del modelo K-Means.
                 </p>
 
                 <button class="btn-modern" onclick="generarDatos()">
+
                     <i class="bi bi-arrow-repeat"></i>
+
                     Generar datos
+
                 </button>
 
                 <div class="botones-modern">
+
                     <a href="/kmeans" class="btn-modern">
+
                         <i class="bi bi-bar-chart-fill"></i>
+
                         Ir a K-Means
+
                     </a>
 
                     <a href="/" class="btn-modern secondary-btn">
+
                         <i class="bi bi-house-fill"></i>
+
                         Volver
+
                     </a>
+
                 </div>
 
             </div>
@@ -96,15 +114,20 @@
             </h3>
 
             <div class="tabla-wrapper">
+
                 <table id="tabla-sample" class="modern-table">
+
                     <thead>
                         <tr>
                             <th>Horas</th>
                             <th>Logros</th>
                         </tr>
                     </thead>
+
                     <tbody></tbody>
+
                 </table>
+
             </div>
 
         </div>
@@ -114,143 +137,74 @@
 </section>
 
 <script>
+
 function generarDatos() {
+
     let datos = [];
 
     for (let i = 0; i < 300; i++) {
+
         let horas = Math.floor(Math.random() * 300) + 1;
+
         let logros = Math.floor(Math.random() * 100);
+
         datos.push({ horas, logros });
+
     }
 
     let full = document.querySelector("#tabla-full tbody");
+
     full.innerHTML = "";
 
     datos.forEach(d => {
-        full.innerHTML += `<tr><td>${d.horas}</td><td>${d.logros}</td></tr>`;
+
+        full.innerHTML += `
+            <tr>
+                <td>${d.horas}</td>
+                <td>${d.logros}</td>
+            </tr>
+        `;
+
     });
 
-    let sample = datos.sort(() => 0.5 - Math.random()).slice(0, 100);
+    let filtrados = datos.filter(d =>
+
+        d.horas >= 20 &&
+        d.horas <= 280 &&
+        d.logros >= 5 &&
+        d.logros <= 95
+
+    );
+
+    let sample = filtrados
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 100);
 
     let sampleTable = document.querySelector("#tabla-sample tbody");
+
     sampleTable.innerHTML = "";
 
     sample.forEach(d => {
-        sampleTable.innerHTML += `<tr><td>${d.horas}</td><td>${d.logros}</td></tr>`;
+
+        sampleTable.innerHTML += `
+            <tr>
+                <td>${d.horas}</td>
+                <td>${d.logros}</td>
+            </tr>
+        `;
+
     });
 
-    localStorage.setItem("datos_kmeans", JSON.stringify(sample));
+    localStorage.setItem(
+        "datos_kmeans",
+        JSON.stringify(sample)
+    );
+
 }
 
 window.onload = generarDatos;
+
 </script>
 
 </body>
 </html>
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>K-Means</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-
-<section class="kmeans-container">
-
-    <h1 class="page-title">
-        <i class="bi bi-bar-chart-line-fill"></i>
-        Modelo K-Means Clustering
-    </h1>
-
-    <p class="page-subtitle">
-        Análisis y agrupamiento de jugadores utilizando clustering no supervisado.
-    </p>
-
-    <div class="kmeans-grid">
-
-        <div class="graph-card">
-            <h3>
-                <i class="bi bi-diagram-3-fill"></i>
-                Visualización de clústeres
-            </h3>
-
-            <img src="{{ url_for('static', filename='img/clusters.png') }}" alt="Clusters">
-        </div>
-
-        <div class="graph-card">
-            <h3>
-                <i class="bi bi-bullseye"></i>
-                Centroides
-            </h3>
-
-            <img src="{{ url_for('static', filename='img/centroides.png') }}" alt="Centroides">
-        </div>
-
-        <div class="graph-card full-width">
-            <h3>
-                <i class="bi bi-graph-up-arrow"></i>
-                Método del codo
-            </h3>
-
-            <img src="{{ url_for('static', filename='img/codo.png') }}" alt="Metodo del codo">
-        </div>
-
-    </div>
-
-    <div class="interpretacion-box">
-
-        <h2>
-            <i class="bi bi-clipboard-data-fill"></i>
-            Interpretación de resultados
-        </h2>
-
-        <p>
-            El modelo permitió identificar diferentes perfiles de jugadores según
-            las horas jugadas y los logros obtenidos.
-        </p>
-
-        <ul>
-            <li><strong>Clúster 1:</strong> Jugadores casuales con pocas horas y pocos logros.</li>
-            <li><strong>Clúster 2:</strong> Jugadores frecuentes con actividad intermedia.</li>
-            <li><strong>Clúster 3:</strong> Jugadores completistas con muchas horas y logros altos.</li>
-        </ul>
-
-        <p>
-            El valor de K fue seleccionado mediante el método del codo, observando
-            el punto donde la disminución de la inercia deja de ser significativa.
-        </p>
-
-    </div>
-
-    <div class="botones-modern center-buttons">
-
-        <a href="/dataset" class="btn-modern">
-            <i class="bi bi-table"></i>
-            Ver Dataset
-        </a>
-
-        <a href="/" class="btn-modern secondary-btn">
-            <i class="bi bi-house-fill"></i>
-            Volver al inicio
-        </a>
-
-    </div>
-
-</section>
-
-</body>
-</html>
-
-
-
