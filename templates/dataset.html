@@ -1,103 +1,143 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Dataset Steam</title>
+    <title>Dataset de Jugadores</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FUENTE -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- ICONOS -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
+    <!-- CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
 <body>
 
-<section class="dataset-container">
+    <section class="dataset-container">
 
-    <h1 class="page-title">
-        <i class="bi bi-database-fill"></i>
-        Dataset de jugadores
-    </h1>
+        <h2>
+            <i class="bi bi-database-fill"></i>
+            Dataset de jugadores
+        </h2>
 
-    <p class="page-subtitle">
-        Generación y selección de datos utilizados para el análisis de clustering.
-    </p>
+        <p id="info">
+            Generación y selección de datos utilizados para el análisis de clustering.
+        </p>
 
-    <div class="layout">
+        <div class="layout">
 
-        <!-- IZQUIERDA -->
-        <div class="col-box">
+            <!-- TABLA IZQUIERDA -->
+            <div class="col">
 
-            <h3>
-                <i class="bi bi-table"></i>
-                300 registros generados
-            </h3>
+                <div class="box">
 
-            <div class="tabla-wrapper">
+                    <h3>
+                        <i class="bi bi-table"></i>
+                        300 registros generados
+                    </h3>
 
-                <table id="tabla-full" class="modern-table">
+                    <div class="tabla-wrapper">
 
-                    <thead>
-                        <tr>
-                            <th>Horas</th>
-                            <th>Logros</th>
-                        </tr>
-                    </thead>
+                        <table>
 
-                    <tbody></tbody>
+                            <thead>
+                                <tr>
+                                    <th>Horas</th>
+                                    <th>Logros</th>
+                                </tr>
+                            </thead>
 
-                </table>
+                            <tbody id="tabla-generada">
+                                <!-- DATOS GENERADOS -->
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
 
             </div>
 
-        </div>
+            <!-- CENTRO -->
+            <div class="col center">
 
-        <!-- CENTRO -->
-        <div class="col-box center-box">
+                <div class="box dataset-main">
 
-            <div class="info-card">
+                    <h3>
+                        <i class="bi bi-cpu-fill"></i>
+                        Generación del dataset
+                    </h3>
 
-                <h3>
-                    <i class="bi bi-cpu-fill"></i>
-                    Generación del dataset
-                </h3>
+                    <p>
+                        Se generan 300 datos aleatorios relacionados con horas jugadas
+                        y logros desbloqueados.
+                    </p>
 
-                <p>
-                    Se generan 300 datos aleatorios relacionados con horas jugadas
-                    y logros desbloqueados. Posteriormente se seleccionan
-                    100 registros para el análisis del modelo K-Means.
-                </p>
+                    <p>
+                        Posteriormente, se seleccionan 100 registros para el análisis
+                        del modelo K-Means.
+                    </p>
 
-                <button class="btn-modern" onclick="generarDatos()">
+                    <div class="botones">
 
-                    <i class="bi bi-arrow-repeat"></i>
+                        <button class="btn" onclick="generarDatos()">
+                            <i class="bi bi-arrow-repeat"></i>
+                            Generar datos
+                        </button>
 
-                    Generar datos
+                        <a href="/kmeans" class="btn">
+                            <i class="bi bi-bar-chart-fill"></i>
+                            Ir a K-Means
+                        </a>
 
-                </button>
+                        <a href="/" class="btn">
+                            <i class="bi bi-house-fill"></i>
+                            Volver
+                        </a>
 
-                <div class="botones-modern">
+                    </div>
 
-                    <a href="/kmeans" class="btn-modern">
+                </div>
 
-                        <i class="bi bi-bar-chart-fill"></i>
+            </div>
 
-                        Ir a K-Means
+            <!-- TABLA DERECHA -->
+            <div class="col">
 
-                    </a>
+                <div class="box">
 
-                    <a href="/" class="btn-modern secondary-btn">
+                    <h3>
+                        <i class="bi bi-funnel-fill"></i>
+                        100 seleccionados
+                    </h3>
 
-                        <i class="bi bi-house-fill"></i>
+                    <div class="tabla-wrapper">
 
-                        Volver
+                        <table>
 
-                    </a>
+                            <thead>
+                                <tr>
+                                    <th>Horas</th>
+                                    <th>Logros</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tabla-seleccionada">
+                                <!-- DATOS SELECCIONADOS -->
+                            </tbody>
+
+                        </table>
+
+                    </div>
 
                 </div>
 
@@ -105,106 +145,75 @@
 
         </div>
 
-        <!-- DERECHA -->
-        <div class="col-box">
+    </section>
 
-            <h3>
-                <i class="bi bi-filter-circle-fill"></i>
-                100 seleccionados
-            </h3>
+    <script>
 
-            <div class="tabla-wrapper">
+        let datosGenerados = [];
+        let datosSeleccionados = [];
 
-                <table id="tabla-sample" class="modern-table">
+        function generarDatos() {
 
-                    <thead>
-                        <tr>
-                            <th>Horas</th>
-                            <th>Logros</th>
-                        </tr>
-                    </thead>
+            datosGenerados = [];
 
-                    <tbody></tbody>
+            for (let i = 0; i < 300; i++) {
 
-                </table>
+                datosGenerados.push({
 
-            </div>
+                    horas: Math.floor(Math.random() * 300) + 1,
 
-        </div>
+                    logros: Math.floor(Math.random() * 100) + 1
 
-    </div>
+                });
 
-</section>
+            }
 
-<script>
+            datosSeleccionados = datosGenerados.slice(0, 100);
 
-function generarDatos() {
+            renderizarTablas();
 
-    let datos = [];
+            localStorage.setItem(
+                "datos_kmeans",
+                JSON.stringify(datosSeleccionados)
+            );
+        }
 
-    for (let i = 0; i < 300; i++) {
+        function renderizarTablas() {
 
-        let horas = Math.floor(Math.random() * 300) + 1;
+            let tablaGenerada =
+                document.getElementById("tabla-generada");
 
-        let logros = Math.floor(Math.random() * 100);
+            let tablaSeleccionada =
+                document.getElementById("tabla-seleccionada");
 
-        datos.push({ horas, logros });
+            tablaGenerada.innerHTML = "";
+            tablaSeleccionada.innerHTML = "";
 
-    }
+            datosGenerados.forEach(d => {
 
-    let full = document.querySelector("#tabla-full tbody");
+                tablaGenerada.innerHTML += `
+                    <tr>
+                        <td>${d.horas}</td>
+                        <td>${d.logros}</td>
+                    </tr>
+                `;
+            });
 
-    full.innerHTML = "";
+            datosSeleccionados.forEach(d => {
 
-    datos.forEach(d => {
+                tablaSeleccionada.innerHTML += `
+                    <tr>
+                        <td>${d.horas}</td>
+                        <td>${d.logros}</td>
+                    </tr>
+                `;
+            });
+        }
 
-        full.innerHTML += `
-            <tr>
-                <td>${d.horas}</td>
-                <td>${d.logros}</td>
-            </tr>
-        `;
+        generarDatos();
 
-    });
-
-    let filtrados = datos.filter(d =>
-
-        d.horas >= 20 &&
-        d.horas <= 280 &&
-        d.logros >= 5 &&
-        d.logros <= 95
-
-    );
-
-    let sample = filtrados
-        .sort(() => 0.5 - Math.random())
-        .slice(0, 100);
-
-    let sampleTable = document.querySelector("#tabla-sample tbody");
-
-    sampleTable.innerHTML = "";
-
-    sample.forEach(d => {
-
-        sampleTable.innerHTML += `
-            <tr>
-                <td>${d.horas}</td>
-                <td>${d.logros}</td>
-            </tr>
-        `;
-
-    });
-
-    localStorage.setItem(
-        "datos_kmeans",
-        JSON.stringify(sample)
-    );
-
-}
-
-window.onload = generarDatos;
-
-</script>
+    </script>
 
 </body>
+
 </html>
